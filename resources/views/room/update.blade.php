@@ -25,7 +25,10 @@
                         <label for="room_number">Room type</label>
                         <select name="room_type" id="room_type_select">
                             @foreach ($room_types as $room_type)
-                                <option value="{{ $room_type->id }}">{{ Str::title($room_type->room_type_name) }}</option>
+                                <option value="{{ $room_type->id }}"
+                                    @if ($room->room_type_id == $room_type->id)
+                                        selected
+                                    @endif>{{ Str::title($room_type->room_type_name) }}</option>
                             @endforeach
                         </select>
                         <label for="room_number">Base price</label>

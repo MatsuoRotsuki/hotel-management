@@ -120,6 +120,14 @@
                                 <button type="submit">Click to view</button>
                             </form>
                         </div>
+                        @can('isGuest', App\Room::class)
+                        <div class="text-center hover:bg-gray-50 hover:text-gray-900">
+                            <form method="POST" action="{{ route('book.push', ['room' => $room]) }}">
+                                @csrf
+                                <button type="submit">Book this room</button>
+                            </form>
+                        </div>
+                        @endcan
 
                         @can('isAdmin', App\Room::class)
                         <div class="text-center hover:bg-gray-50 hover:text-gray-900">
@@ -140,15 +148,27 @@
                     </div>
                 </div>
             @endforeach
-
+            @auth
             @can('isAdmin', App\Room::class)
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg"> <!--container-->
-                <form class="p-6 bg-white border-b border-gray-200 hover:bg-gray-700 hover:text-white text-center" method="GET" action="{{ route('room-create') }}">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg text-center"> <!--container-->
+                <form class="p-6 bg-white border-b border-gray-200 hover:bg-gray-700 hover:text-white" method="GET" action="{{ route('room-create') }}">
                     @csrf
                     <button onclick="{{ route('room-create') }}" class="text-2xl p-6">Add room</button>
                 </form>
+                @if ($rooms->count() == 0)
+                    <div class="p-4">
+                        There are no room yet!
+                    </div>
+                @endif
             </div>
+            @else
+                @if ($rooms->count() == 0)
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg text-center px-4 pt-10 pb-10 text-xl">
+                        There are no room yet!
+                    </div>
+                @endif
             @endcan
+            @endauth
         </div>
     </div>
 </x-app-layout>

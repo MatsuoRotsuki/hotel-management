@@ -27,4 +27,8 @@ class Room extends Model
     public function room_status(){
         return $this->belongsTo(RoomStatus::class);
     }
+
+    // public function reserve(){
+    //     return $this->hasMany(RoomReservation::class);
+    // }
 }

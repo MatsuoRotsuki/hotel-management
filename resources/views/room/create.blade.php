@@ -18,7 +18,6 @@
                             <input type="text" name="room_number" placeholder="Room number">
                             <input type="number" name="room_area" placeholder="Room area">
                             <select name="room_type" id="type_selector">
-                                <option value="1">Single</option>
                                 @foreach ($room_types as $room_type)
                                     <option value="{{$room_type->id}}">{{ Str::title($room_type->room_type_name) }}</option>
                                 @endforeach

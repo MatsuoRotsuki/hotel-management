@@ -31,7 +31,14 @@
                         <label for="room_number">Base price</label>
                         <input type="text" name="base_price" value="{{ $room->base_price }}">
                         <label for="room_number">Room status</label>
-                        <input type="number" name="room_status" value="{{ $room->room_status->id }}">
+                        <select name="room_status" id="room_status_select">
+                            @foreach ($room_statuses as $room_status)
+                                <option value="{{$room_status->id}}"
+                                    @if ($room->room_status_id == $room_status->id)
+                                        selected
+                                    @endif>{{ Str::title($room_status->room_status_name) }}</option>
+                            @endforeach
+                        </select>
                         <button type="submit" class="bg-blue-400 text-white p-4">Done</button>
                     </form>
                 </div>

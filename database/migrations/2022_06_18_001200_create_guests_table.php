@@ -15,17 +15,17 @@ class CreateGuestsTable extends Migration
     public function up()
     {
         Schema::create('guests', function (Blueprint $table) {
-            $table->id('guest_id');
-            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
-            $table->string('first_name', 50);
-            $table->string('last_name', 50);
+            $table->id();
+            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade')->unique();
+            $table->string('first_name', 50)->nullable();
+            $table->string('last_name', 50)->nullable();
             $table->date('dob');
-            $table->string('address',50);
+            $table->string('address',50)->nullable();
             $table->char('phone', 10);
-            $table->string('city', 50);
-            $table->string('country', 50);
-            $table->bigInteger('identification_number')->nullable();
-            $table->bigInteger('passport_id')->nullable();
+            $table->string('city', 50)->nullable();
+            $table->string('country', 50)->nullable();
+            $table->string('identification_number',50)->nullable();
+            $table->string('passport_id',50)->nullable();
             $table->timestamps();
         });
     }

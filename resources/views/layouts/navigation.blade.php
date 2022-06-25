@@ -5,14 +5,14 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('home') }}">
                         <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard') || request()->routeIs('/')">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard') || request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-nav-link>
                 </div>
@@ -23,11 +23,13 @@
                     </x-nav-link>
                 </div>
 
+                @auth
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('booking')" :active="request()->routeIs('booking')">
+                    <x-nav-link :href="route('booked')" :active="request()->routeIs('booked')">
                         {{ __('Booked') }}
                     </x-nav-link>
                 </div>
+                @endauth
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('gallery')" :active="request()->routeIs('gallery')">
@@ -78,6 +80,15 @@
                                 {{ __('Change Role') }}
                             </x-dropdown-link>
                         </form>
+                        {{-- <form method="GET" action="{{ route('profile') }}">
+                            @csrf
+
+                            <x-dropdown-link :href="route('profile')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Profile') }}
+                            </x-dropdown-link>
+                        </form> --}}
                     </x-slot>
                 </x-dropdown>
             </div>

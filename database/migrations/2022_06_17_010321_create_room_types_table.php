@@ -26,6 +26,8 @@ class CreateRoomTypesTable extends Migration
             ['id' => 4, 'room_type_name' => 'apartment'],
             ['id' => 5, 'room_type_name' => 'villa'],
             ['id' => 6, 'room_type_name' => 'cottage'],
+            ['id' => 7, 'room_type_name' => 'japanese-styled'],
+            ['id' => 8, 'room_type_name' => 'western-styled'],
         ]);
     }
 

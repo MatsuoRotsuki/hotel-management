@@ -45,29 +45,66 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; grid-auto-rows: minmax(30px, auto); grid-gap: 1em; justify-items:stretch; align-items:stretch;">
+            @php
+               function canReserve($status_id){
+                            switch ($status_id){
+                                case 1:
+                                case 4:
+                                case 7:
+                                    return true;
+                                    break;
+                                case 2:
+                                case 3:
+                                case 5:
+                                case 6:
+                                    return false;
+                                    break;
+                                default:
+                                    return false;
+                                    break;
+                            }
+                        }
 
+                        function getColor($status_id){
+                            switch($status_id){
+                                case 1:
+                                    return 'bg-green-400'; //vacant
+                                    break;
+                                case 2:
+                                    return 'bg-yellow-300'; //occupied
+                                    break;
+                                case 3:
+                                    return 'bg-yellow-200'; //reserved
+                                    break;
+                                case 4:
+                                    return 'bg-orange-500';
+                                    break;
+                                case 5:
+                                    return 'bg-slate-500';
+                                    break;
+                                case 6:
+                                    return 'bg-red-500';
+                                    break;
+                                case 7:
+                                    return 'bg-blue-400';
+                                    break;
+                                default:
+                                    return 'bg-slate-300';
+                                    break;
+                            }
+                        }
+            @endphp
             @foreach ($rooms as $room)
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg text-center"> <!--container-->
 
                     <!-- Vacant room -->
                     @php
                         $statusName = $room->room_status->room_status_name;
+                        $displayColor = getColor($room->room_status->id);
                     @endphp
-                    @if ($statusName =='vacant')
-                    <a href="{{ route('room.show', ['room' => $room]) }}">
-                        <div class="p-6 bg-green-400 border-b border-gray-200">
-                            Room number: {{ $room->room_number }}<br>
-                            Room type: {{ $room->room_type->room_type_name }}<br>
-                            Room status: {{ $room->room_status->room_status_name }}<br>
-                            Base price: {{ $room->base_price }}<br>
-                            Room area: {{ $room->room_area }}<br>
-                        </div>
-                    </a>
-                    @endif
 
-                    @if ($statusName == 'reserved')
                     <a href="{{ route('room.show', ['room' => $room]) }}">
-                        <div class="p-6 bg-yellow-200 border-b border-gray-200">
+                        <div class="p-6 {{ $displayColor }} border-b border-gray-200">
                             Room number: {{ $room->room_number }}<br>
                             Room type: {{ $room->room_type->room_type_name }}<br>
                             Room status: {{ $room->room_status->room_status_name }}<br>
@@ -75,43 +112,7 @@
                             Room area: {{ $room->room_area }}<br>
                         </div>
                     </a>
-                    @endif
 
-                    @if ($statusName == 'occupied')
-                    <a href="{{ route('room.show', ['room' => $room]) }}">
-                        <div class="p-6 bg-yellow-300 border-b border-gray-200">
-                            Room number: {{ $room->room_number }}<br>
-                            Room type: {{ $room->room_type->room_type_name }}<br>
-                            Room status: {{ $room->room_status->room_status_name }}<br>
-                            Base price: {{ $room->base_price }}<br>
-                            Room area: {{ $room->room_area }}<br>
-                        </div>
-                    </a>
-                    @endif
-
-                    @if ($statusName == 'dirty-vacant')
-                    <a href="{{ route('room.show', ['room' => $room]) }}">
-                        <div class="p-6 bg-red-400 border-b border-gray-200">
-                            Room number: {{ $room->room_number }}<br>
-                            Room type: {{ $room->room_type->room_type_name }}<br>
-                            Room status: {{ $room->room_status->room_status_name }}<br>
-                            Base price: {{ $room->base_price }}<br>
-                            Room area: {{ $room->room_area }}<br>
-                        </div>
-                    </a>
-                    @endif
-
-                    @if ($statusName == 'cleaning' || $statusName == 'dirty' || $statusName == 'maintenance')
-                    <a href="{{ route('room.show', ['room' => $room]) }}">
-                        <div class="p-6 bg-red-500 border-b border-gray-200">
-                            Room number: {{ $room->room_number }}<br>
-                            Room type: {{ $room->room_type->room_type_name }}<br>
-                            Room status: {{ $room->room_status->room_status_name }}<br>
-                            Base price: {{ $room->base_price }}<br>
-                            Room area: {{ $room->room_area }}<br>
-                        </div>
-                    </a>
-                    @endif
 
                     <div class="bg-white text-blue-600">
                         <div class="text-center hover:bg-gray-50 hover:text-gray-900">
@@ -121,12 +122,42 @@
                             </form>
                         </div>
                         @can('isGuest', App\Room::class)
-                        <div class="text-center hover:bg-gray-50 hover:text-gray-900">
-                            <form method="POST" action="{{ route('book.push', ['room' => $room]) }}">
-                                @csrf
-                                <button type="submit">Book this room</button>
-                            </form>
-                        </div>
+
+                        @if(canReserve($room->room_status->id))
+                            @php
+                                $roomGuestId = $room->reservations->pluck('guest')->pluck('id');
+                                if(Auth::user()->confirmedInformation){
+                                    $userGuestId = Auth::user()->guest->id;
+
+                                } else {
+                                    $userGuestId = null;
+                                }
+                            @endphp
+                            @if (!$roomGuestId->contains($userGuestId))
+                                <div class="text-center hover:bg-gray-50 hover:text-gray-900">
+                                    <form method="POST" action="{{ route('book.push', ['room' => $room]) }}">
+                                        @csrf
+                                        <button type="submit">Book this room</button>
+                                    </form>
+                                </div>
+                            @else
+                                <div class="text-left ml-2">
+                                    Already Booked! (In Queue... To confirm reservation, please redirect to Booked)
+                                </div>
+                                <div class="text-center hover:bg-gray-50 hover:text-gray-900">
+                                    <form method="POST" action="{{ route('book.pop', ['room' => $room]) }}">
+                                        @csrf
+                                        <button type="submit">Unbook this room</button>
+                                    </form>
+                                </div>
+                            @endif
+                        @else
+                            @if ($room->bookedBy(Auth::user()))
+                                <div class="text-center hover:bg-gray-50 hover:text-gray-900">
+                                    You've booked this room
+                                </div>
+                            @endif
+                        @endif
                         @endcan
 
                         @can('isAdmin', App\Room::class)

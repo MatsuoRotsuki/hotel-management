@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Models\Gallery;
 use App\Models\RoomType;
 use App\Models\RoomStatus;
 use Illuminate\Http\Request;
@@ -55,6 +56,7 @@ class RoomController extends Controller
             'room_area' => ['numeric'],
             'room_type' => ['required','numeric'],
             'base_price' => ['required','numeric'],
+            'img_url' => ['url'],
         ]);
 
         Room::create([
@@ -64,7 +66,12 @@ class RoomController extends Controller
             'base_price' => $request->base_price,
         ]);
 
-        return redirect('room');
+        $room = Room::where('room_number', $request->room_number)->first();
+        $room->gallery()->create([
+            'img_url' => $request->img_url,
+        ]);
+
+        return redirect()->route('room');
     }
 
     public function redirectUpdate(Room $room)

@@ -20,7 +20,7 @@ class CreateReservationsTable extends Migration
             $table->foreignIdFor(Guest::class)->constrained()->onDelete('cascade');
             $table->date('checkin_date');
             $table->date('checkout_date');
-            $table->integer('num_of_people')->unsigned()->nullable()->default(1);
+            $table->integer('num_of_people')->unsigned()->default(1);
             $table->foreignIdFor(ReservationStatus::class)->default(1)->constrained()->onDelete('cascade');
             $table->timestamps();
         });

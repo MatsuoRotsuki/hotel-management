@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Room;
+use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Guest extends Model
 {
@@ -21,13 +23,17 @@ class Guest extends Model
         'passport_id',
     ];
 
-    /**
-     * Get the user that owns the Guest
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasOne(Reservation::class);
+    }
+
+    public function rates(){
+        return $this->hasMany(Rate::class);
     }
 }

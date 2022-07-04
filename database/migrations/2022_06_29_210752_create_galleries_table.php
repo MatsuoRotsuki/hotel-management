@@ -17,8 +17,7 @@ class CreateGalleriesTable extends Migration
         Schema::create('galleries', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Room::class)->constrained()->onDelete('cascade');
-            $table->string('img_link')->default('');
-            $table->timestamps();
+            $table->string('img_url')->nullable();
         });
     }
 

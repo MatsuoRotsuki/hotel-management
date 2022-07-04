@@ -10,7 +10,7 @@ class RoomStatus extends Model
 {
     use HasFactory;
 
-    public function room(){
+    public function rooms(){
         return $this->hasMany(Room::class);
     }
 }

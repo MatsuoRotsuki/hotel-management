@@ -24,11 +24,9 @@ class CreateRoomStatusesTable extends Migration
             ['id' => 2, 'room_status_name' => 'occupied'],
             ['id' => 3, 'room_status_name' => 'reserved'],
             ['id' => 4, 'room_status_name' => 'dirty'],
-            ['id' => 5, 'room_status_name' => 'dirty-vacant'],
-            ['id' => 6, 'room_status_name' => 'maintenance'],
-            ['id' => 7, 'room_status_name' => 'out of order'],
-            ['id' => 8, 'room_status_name' => 'dirty-reserved'],
-            ['id' => 9, 'room_status_name' => 'cleaning'],
+            ['id' => 5, 'room_status_name' => 'maintenance'],
+            ['id' => 6, 'room_status_name' => 'out of order'],
+            ['id' => 7, 'room_status_name' => 'cleaning'],
         ]);
     }
 

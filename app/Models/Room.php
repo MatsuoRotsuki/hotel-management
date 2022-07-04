@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Guest;
+use App\Models\Gallery;
 use App\Models\RoomType;
 use App\Models\RoomStatus;
+use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -28,7 +31,23 @@ class Room extends Model
         return $this->belongsTo(RoomStatus::class);
     }
 
-    // public function reserve(){
-    //     return $this->hasMany(RoomReservation::class);
-    // }
+    public function gallery(){
+        return $this->hasMany(Gallery::class);
+    }
+
+    public function reservations()
+    {
+        return $this->belongsToMany(Reservation::class, 'reservation_pivots', 'room_id', 'reservation_id');
+    }
+
+    public function bookedBy(User $user){
+        if ($user->confirmedInformation){
+            $guest = $user->guest;
+            if($user->guest->reservations()->count()){
+                $ids = $guest->reservations->rooms()->pluck('id');
+                return $ids->contains($this->id);
+            }
+        }
+        return false;
+    }
 }

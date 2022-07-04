@@ -16,9 +16,10 @@ class CreateRatesTable extends Migration
     {
         Schema::create('rates', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Guest::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Room::class)->constrained()->onDelete('cascade');
             $table->text('comment')->nullable();
-            $table->smallInteger('rate');
+            $table->smallInteger('rate')->unsigned();
             $table->timestamps();
         });
     }

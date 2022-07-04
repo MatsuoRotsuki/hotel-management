@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRoomReservationsTable extends Migration
+class CreateReservationPivotsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,11 +15,9 @@ class CreateRoomReservationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('room_reservations', function (Blueprint $table) {
-            $table->id();
+        Schema::create('reservation_pivots', function (Blueprint $table) {
             $table->foreignIdFor(Room::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Reservation::class)->constrained()->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
@@ -30,6 +28,6 @@ class CreateRoomReservationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('room_reservations');
+        Schema::dropIfExists('reservation_pivots');
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Guest;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -17,9 +18,8 @@ class CreateRatesTable extends Migration
         Schema::create('rates', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Guest::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Room::class)->constrained()->onDelete('cascade');
             $table->text('comment')->nullable();
-            $table->smallInteger('rate')->unsigned();
+            $table->smallInteger('rating')->unsigned();
             $table->timestamps();
         });
     }

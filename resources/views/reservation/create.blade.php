@@ -32,15 +32,15 @@
                             @enderror
 
                             <div class="flex flex-row items-center justify-start">
-                                <label>Check-in date:</label>
+                                <label for="checkin_date">Check-in date:</label>
                                 <input type="date" name="checkin_date" value="{{ old('checkin_date') }}">
                             </div>
                             <div class="flex flex-row items-center justify-start">
-                                <label>Check-out date:</label>
+                                <label for="checkout_date">Check-out date:</label>
                                 <input type="date" name="checkout_date" value="{{ old('checkout_date') }}">
                             </div>
                             <div class="flex flex-row items-center justify-start">
-                                <label>Number of people:</label>
+                                <label for="num_of_people">Number of people:</label>
                                 <input type="number" name="num_of_people" value="{{ old('num_of_people') }}">
                             </div>
                             <button class="p-4 bg-black text-white my-2">Submit</button>

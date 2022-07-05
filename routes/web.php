@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\RatesController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 
 /*
@@ -40,7 +42,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/info-form',[GuestController::class,'index'])->name('guest.create.render');
 Route::post('/info-create',[GuestController::class,'store'])->middleware('auth')->name('guest.create');
-// Route::get('/user',[ProfileController::class,'index'])->name('profile');
+Route::get('/guest/{guest}',[ProfileController::class,'index'])->name('profile');
 
 // Route::get('/booked', [ReservationController::class, 'index'])->name('booked')->middleware(['auth','confirmed']);
 // Route::post('/book/{room}', [ReservationController::class, 'store'])->name('book.push')->middleware(['auth','confirmed']);
@@ -56,11 +58,21 @@ Route::middleware(['auth', 'confirmed'])->group(function () {
 Route::get('/gallery',[GalleryController::class, 'index'])->name('gallery');
 
 Route::get('/rates', [RatesController::class, 'index'])->name('rates');
+Route::post('/rates', [RatesController::class, 'create'])->name('rates.create');
+Route::post('/rates/{rate}', [RatesController::class, 'destroy'])->name('rates.destroy');
 
 Route::post('/change-role', function(){
     $newRole = (Auth::user()->role === 'admin') ? 'guest' : 'admin';
     Auth::user()->update(['role' => $newRole]);
     return back();
 })->middleware('auth')->name('change.role');
+
+Route::post('/change-role/staff', function(){
+    Auth::user()->update(['role' => 'staff']);
+    return back();
+})->middleware('auth')->name('change.role.staff');
+
+Route::get('/staff/create-form', [StaffController::class, 'create'])->name('staff.create.render');
+Route::post('/staff/create',[StaffController::class, 'store'])->name('staff.create');
 
 require __DIR__.'/auth.php';

@@ -71,15 +71,38 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
+                        @php
+                            $newRole = (Auth::user()->role === 'admin') ? 'guest' : 'admin';
+                        @endphp
                         <form method="POST" action="{{ route('change.role') }}">
                             @csrf
 
                             <x-dropdown-link :href="route('change.role')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Change Role') }}
+                                {{ __('Change Role To: ' . Str::title($newRole)) }}
                             </x-dropdown-link>
                         </form>
+                        <form method="POST" action="{{ route('change.role.staff') }}">
+                            @csrf
+
+                            <x-dropdown-link :href="route('change.role.staff')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Change Role To: Staff') }}
+                            </x-dropdown-link>
+                        </form>
+                    @can('isAdmin', App\Staff::class)
+                        <form method="GET" action="{{ route('staff.create.render') }}">
+                            @csrf
+
+                            <x-dropdown-link :href="route('staff.create.render')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Create Staff Information') }}
+                            </x-dropdown-link>
+                        </form>
+                    @endcan
                         {{-- <form method="GET" action="{{ route('profile') }}">
                             @csrf
 

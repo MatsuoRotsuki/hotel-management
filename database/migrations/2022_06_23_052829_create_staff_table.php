@@ -16,6 +16,7 @@ class CreateStaffTable extends Migration
     {
         Schema::create('staff', function (Blueprint $table) {
             $table->id('staff_id');
+            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->string('first_name', 50)->nullable();
             $table->string('last_name', 50)->nullable();
             $table->foreignIdFor(Department::class)->constrained()->onDelete('cascade');

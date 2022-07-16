@@ -17,6 +17,9 @@ class GuestMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if ($request->user()->role === 'staff' || $request->user()->role === 'admin'){
+            return $next($request);
+        }
         if(!$request->user()->confirmedInformation){
             return redirect()->route('guest.create.render');
         }

@@ -20,14 +20,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'firstname',
-        'lastname',
+        'first_name',
+        'last_name',
         'username',
         'email',
         'password',
         'role',
         'confirmedInformation',
     ];
+
+    protected $primaryKey = 'user_id';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -55,11 +57,11 @@ class User extends Authenticatable
      */
     public function guest()
     {
-        return $this->hasOne(Guest::class, 'user_id');
+        return $this->hasOne(Guest::class, 'user_id', 'user_id');
     }
 
     public function staff()
     {
-        return $this->hasOne(Staff::class);
+        return $this->hasOne(Staff::class, 'user_id', 'user_id');
     }
 }

@@ -53,6 +53,7 @@ Route::middleware(['auth', 'confirmed'])->group(function () {
     Route::get('/reservation-create', [ReservationController::class,'redirectCreate'])->name('book.create.render');//done
     Route::post('/reservation-create',[ReservationController::class, 'create'])->name('book.create');//done
     Route::get('/book-confirm', [ReservationController::class, 'confirm'])->middleware(['didReserved'])->name('book.confirm');
+    Route::get('/reservation-control-panel', [ReservationController::class, 'showQueue'])->name('book.showQueue');
 });
 
 Route::get('/gallery',[GalleryController::class, 'index'])->name('gallery');

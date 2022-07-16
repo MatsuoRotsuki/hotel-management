@@ -15,9 +15,13 @@ class CreateGalleriesTable extends Migration
     public function up()
     {
         Schema::create('galleries', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(Room::class)->constrained()->onDelete('cascade');
-            $table->string('img_url')->nullable();
+            $table->increments('gallery_id');
+            $table->integer('room_id')->unsigned();
+            $table->foreign('room_id')
+                ->references('room_id')->on('rooms')
+                ->onDelete('cascade');
+            // $table->foreignIdFor(Room::class)->constrained()->onDelete('cascade');
+            $table->text('img_url')->nullable();
         });
     }
 

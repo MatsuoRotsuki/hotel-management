@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Models\Rate;
 use App\Models\Room;
+use App\Models\Guest;
 use App\Models\Staff;
 use App\Models\Reservation;
 use App\Policies\RatePolicy;
 use App\Policies\RoomPolicy;
+use App\Policies\GuestPolicy;
 use App\Policies\StaffPolicy;
 use App\Policies\ReservationPolicy;
 use Illuminate\Support\Facades\Gate;
@@ -26,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         Reservation::class => ReservationPolicy::class,
         Staff::class => StaffPolicy::class,
         Rate::class => RatePolicy::class,
+        Guest::class => GuestPolicy::class,
     ];
 
     /**

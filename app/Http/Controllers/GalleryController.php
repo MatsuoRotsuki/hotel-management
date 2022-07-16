@@ -10,6 +10,7 @@ class GalleryController extends Controller
 {
     public function index(Request $request)
     {
-        dd('gallery');
+        // dd($request->user()->guest->reservations->where('reservation_status_id', 1)->count());
+        dd($request->user()->guest->alreadyReserve());
     }
 }

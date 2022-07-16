@@ -15,9 +15,18 @@ class CreateReservationPivotsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reservation_pivots', function (Blueprint $table) {
-            $table->foreignIdFor(Room::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Reservation::class)->constrained()->onDelete('cascade');
+        Schema::create('reservation_room', function (Blueprint $table) {
+            // $table->foreignIdFor(Room::class)->constrained()->onDelete('cascade');
+            // $table->foreignIdFor(Reservation::class)->constrained()->onDelete('cascade');
+            $table->integer('room_id')->unsigned();
+            $table->integer('reservation_id')->unsigned();
+
+            $table->foreign('room_id')
+                ->references('room_id')->on('rooms')
+                ->onDelete('cascade');
+            $table->foreign('reservation_id')
+                ->references('reservation_id')->on('reservations')
+                ->onDelete('cascade');
         });
     }
 
@@ -28,6 +37,6 @@ class CreateReservationPivotsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reservation_pivots');
+        Schema::dropIfExists('reservation_room');
     }
 }

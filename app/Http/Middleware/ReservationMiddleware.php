@@ -16,6 +16,9 @@ class ReservationMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if ($request->user()->role === 'staff' || $request->user()->role === 'admin'){
+            return $next($request);
+        }
         if (!$request->user()->guest->reservations()->count()){
             return redirect()->route('book.create.render');
         }

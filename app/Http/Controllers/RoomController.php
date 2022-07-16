@@ -56,7 +56,7 @@ class RoomController extends Controller
             'room_area' => ['numeric'],
             'room_type' => ['required','numeric'],
             'base_price' => ['required','numeric'],
-            'img_url' => ['url'],
+            'img_url' => ['url','nullable'],
         ]);
 
         Room::create([

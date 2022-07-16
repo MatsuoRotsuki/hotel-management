@@ -24,4 +24,7 @@ class ReservationPolicy
     public function isStaff(User $user){
         return $user->role === 'staff' || $user->role === 'admin';
     }
+    public function isNotStaff(User $user){
+        return $user->role !== 'staff';
+    }
 }

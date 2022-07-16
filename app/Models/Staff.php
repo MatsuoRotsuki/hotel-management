@@ -18,10 +18,15 @@ class Staff extends Model
         'phone',
         'identification_number',
         'salary',
+        'gender',
     ];
+
+    protected $primaryKey = 'staff_id';
+
+    public $timestamps = false;
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 }

@@ -11,9 +11,9 @@ class GuestController extends Controller
 {
     public function index(Request $request)
     {
-        if($request->user()->role !== 'admin'){
-            $this->authorize('isGuest', Room::class);
-        }
+        $this->authorize('isGuest', Room::class);
+
+        $this->authorize('notRegistered', Guest::class);
 
         return view('guest.create');
     }
@@ -23,7 +23,7 @@ class GuestController extends Controller
         $user = $request->user();
 
         $this->validate($request,[
-            'dob' => ['date'],
+            'dob' => ['date','required'],
             'address' => ['string','max:50','nullable'],
             'phone' => ['required','string','max:50','min:10'],
             'city' => ['string','max:50','nullable'],
@@ -35,8 +35,6 @@ class GuestController extends Controller
         $user->update(['confirmedInformation' => 1]);
 
         $request->user()->guest()->create([
-            'first_name' => $user->firstname,
-            'last_name' => $user->lastname,
             'dob' => $request->dob,
             'address' => $request->address,
             'phone' => $request->phone,

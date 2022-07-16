@@ -23,13 +23,21 @@
                     </x-nav-link>
                 </div>
 
-                @auth
+                @can('isGuest', App\Reservation::class)
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('booked')" :active="request()->routeIs('booked')">
                         {{ __('Booked') }}
                     </x-nav-link>
                 </div>
-                @endauth
+                @endcan
+
+                @can('isStaff', App\Reservation::class)
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('book.showQueue')" :active="request()->routeIs('booked')">
+                        {{ __('Reservation Control Panel') }}
+                    </x-nav-link>
+                </div>
+                @endcan
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('gallery')" :active="request()->routeIs('gallery')">
@@ -50,7 +58,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                            <div>{{ Auth::user()->firstname}} {{ Auth::user()->lastname }}</div>
+                            <div>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
 
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -99,7 +107,7 @@
                             <x-dropdown-link :href="route('staff.create.render')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Create Staff Information') }}
+                                {{ __('Create Staff Account') }}
                             </x-dropdown-link>
                         </form>
                     @endcan
@@ -158,7 +166,7 @@
         @auth
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->firstname }}</div>
+                <div class="font-medium text-base text-gray-800">{{ Auth::user()->first_name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 

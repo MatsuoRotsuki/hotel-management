@@ -16,6 +16,7 @@
                     Room {{ $room->room_number }}
                 </div>
                 <div class="items-center flex-col flex sm:justify-center">
+                    <x-auth-validation-errors class="mb-4" :errors="$errors" />
                     <form method="POST" action="{{ route('room.update',$room) }}" class="flex items-center flex-col sm:justify-center">
                         @csrf
                         <label for="room_number">Room number</label>
@@ -25,8 +26,8 @@
                         <label for="room_number">Room type</label>
                         <select name="room_type" id="room_type_select">
                             @foreach ($room_types as $room_type)
-                                <option value="{{ $room_type->id }}"
-                                    @if ($room->room_type_id == $room_type->id)
+                                <option value="{{ $room_type->room_type_id }}"
+                                    @if ($room->room_type_id == $room_type->room_type_id)
                                         selected
                                     @endif>{{ Str::title($room_type->room_type_name) }}</option>
                             @endforeach
@@ -36,8 +37,8 @@
                         <label for="room_number">Room status</label>
                         <select name="room_status" id="room_status_select">
                             @foreach ($room_statuses as $room_status)
-                                <option value="{{$room_status->id}}"
-                                    @if ($room->room_status_id == $room_status->id)
+                                <option value="{{$room_status->room_status_id}}"
+                                    @if ($room->room_status_id == $room_status->room_status_id)
                                         selected
                                     @endif>{{ Str::title($room_status->room_status_name) }}</option>
                             @endforeach

@@ -16,8 +16,10 @@ class Gallery extends Model
         'img_url',
     ];
 
+    protected $primaryKey = 'gallery_id';
+
     public function room()
     {
-        return $this->belongsTo(Room::class);
+        return $this->belongsTo(Room::class, 'room_id', 'room_id');
     }
 }

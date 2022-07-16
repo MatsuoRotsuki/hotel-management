@@ -23,29 +23,32 @@ class Room extends Model
         'room_status_id',
     ];
 
+    protected $primaryKey = 'room_id';
+
     public function room_type(){
-        return $this->belongsTo(RoomType::class);
+        return $this->belongsTo(RoomType::class, 'room_type_id', 'room_type_id');
     }
 
     public function room_status(){
-        return $this->belongsTo(RoomStatus::class);
+        return $this->belongsTo(RoomStatus::class, 'room_status_id', 'room_status_id');
     }
 
     public function gallery(){
-        return $this->hasMany(Gallery::class);
+        return $this->hasMany(Gallery::class, 'room_id', 'room_id');
     }
 
     public function reservations()
     {
-        return $this->belongsToMany(Reservation::class, 'reservation_pivots', 'room_id', 'reservation_id');
+        return $this->belongsToMany(Reservation::class, 'reservation_room', 'room_id', 'reservation_id');
     }
 
     public function bookedBy(User $user){
         if ($user->confirmedInformation){
             $guest = $user->guest;
-            if($user->guest->reservations()->count()){
-                $ids = $guest->reservations->rooms()->pluck('id');
-                return $ids->contains($this->id);
+            $reservation = $guest->reservations->whereIn('reservation_status_id', [1, 2, 3, 4])->first();
+            if($reservation){
+                $ids = $reservation->rooms()->pluck('rooms.room_id');
+                return $ids->contains($this->room_id);
             }
         }
         return false;

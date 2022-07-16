@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rate;
+use App\Models\Guest;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class RatesController extends Controller
 
         $this->validate($request, [
             'rating' => ['required','numeric','max:5'],
-            'comment' => ['string','max:255'],
+            'comment' => ['string','max:255','required'],
         ]);
 
         $guest = $request->user()->guest;
@@ -34,16 +35,16 @@ class RatesController extends Controller
         }
 
         if ($guest->reservations()->count()){
-            if ($guest->reservations->reservation_status_id === 3)
+            if ($guest->reservations->whereIn('reservation_status_id', [4,5]))
             {
                 $guest->rates()->create([
                     'rating' => $request->rating,
                     'comment' => $request->comment,
                 ]);
                 return back();
-            }
+            } else return back()->withErrors(['rating' => 'You need to reserve a room of hotel first!']);
         } else {
-            return back()->withErrors(['rating' => 'You need to reserved a room of hotel first!']);
+            return back()->withErrors(['rating' => 'You need to reserve a room of hotel first!']);
         }
     }
 

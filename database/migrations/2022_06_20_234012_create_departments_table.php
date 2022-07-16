@@ -14,14 +14,14 @@ class CreateDepartmentsTable extends Migration
     public function up()
     {
         Schema::create('departments', function (Blueprint $table) {
-            $table->id();
+            $table->increments('department_id');
             $table->string('department_name');
             $table->text('note')->nullable();
         });
 
         DB::table('departments')->insert([
-            ['id' => 1, 'department_name' => 'Reception'],
-            ['id' => 2, 'department_name' => 'Janitor'],
+            ['department_id' => 1, 'department_name' => 'Reception'],
+            ['department_id' => 2, 'department_name' => 'Janitor'],
         ]);
     }
 

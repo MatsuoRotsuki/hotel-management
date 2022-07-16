@@ -10,7 +10,9 @@ class RoomStatus extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'room_status_id';
+
     public function rooms(){
-        return $this->hasMany(Room::class);
+        return $this->hasMany(Room::class, 'room_status_id', 'room_status_id');
     }
 }

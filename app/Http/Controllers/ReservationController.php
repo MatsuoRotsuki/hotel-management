@@ -13,21 +13,45 @@ class ReservationController extends Controller
     public function index(Request $request)
     {
         $guest = $request->user()->guest;
-        $ids = $guest->reservations->rooms()->pluck('id');
-        $rooms = Room::find($ids);
-        $confirmedRooms = $rooms->where('room_status_id', 3);
-        $queueRooms = $rooms->whereNotIn('room_status_id', [3]);
+        $reservation = $guest->reservations->whereIn('reservation_status_id', [1, 2, 3, 4])->first();
+        $reservation_status = $reservation->reservation_status_id;
+        $selectedRoomIds = null;
+        $confirmedRoomIds = null;
+        $queueRoomIds = null;
+        $checkedInRoomIds = null;
+        $checkedOutRoomsIds = null;
+        if ($reservation_status === 1){
+            $selectedRoomIds = $reservation->rooms()->pluck('rooms.room_id');
+        } elseif ($reservation_status === 2){
+            $queueRoomIds = $reservation->rooms()->pluck('rooms.room_id');
+        } elseif ($reservation_status === 3){
+            $confirmedRoomIds = $reservation->rooms()->pluck('rooms.room_id');
+        } elseif ($reservation_status === 4){
+            $checkedInRoomIds = $reservation->rooms()->pluck('rooms.room_id');
+        } elseif ($reservation_status === 5){
+            $checkedOutRoomsIds = $reservation->rooms()->pluck('rooms.room_id');
+        }
+
+        $selectedRooms = Room::find($selectedRoomIds);
+        $confirmedRooms = Room::find($confirmedRoomIds);
+        $queueRooms = Room::find($queueRoomIds);
+        $checkedInRooms = Room::find($checkedInRoomIds);
+        $checkedOutRooms = Room::find($checkedOutRoomsIds);
+
         return view('reservation.index', [
+            'selectedRooms' => $selectedRooms,
             'queueRooms' => $queueRooms,
             'confirmedRooms' => $confirmedRooms,
+            'checkedInRooms' => $checkedInRooms,
+            'checkedOutRooms' => $checkedOutRooms,
         ]);
     }
 
     public function store(Room $room, Request $request){ //book.push
         $this->authorize('isGuest', Reservation::class);
 
-        $reservation = $request->user()->guest->reservations;
-        $roomId = $room->id;
+        $reservation = $request->user()->guest->reservations->whereIn('reservation_status_id', [1])->first();
+        $roomId = $room->room_id;
         $reservation->rooms()->attach($roomId);
         return back();
     }
@@ -65,10 +89,11 @@ class ReservationController extends Controller
     {
         $this->authorize('isGuest', Reservation::class);
         $guest = $request->user()->guest;
-        $room_ids = $guest->reservations->rooms()->pluck('id');
-        $guestReserveId = $guest->reservations->id;
-        $guest->reservations->update(['reservation_status_id' => 2]);
-        $idNotIn = Reservation::all()->except($guestReserveId)->pluck('id');
+        $reservation = $guest->reservations->whereIn('reservation_status_id', [1])->first();
+        $room_ids = $reservation->rooms()->pluck('rooms.room_id');
+        $guestReserveId = $reservation->reservation_id;
+        $reservation->update(['reservation_status_id' => 2]);
+        $idNotIn = Reservation::all()->except($guestReserveId)->pluck('reservation_id');
 
 
         $rooms = Room::find($room_ids);
@@ -82,8 +107,8 @@ class ReservationController extends Controller
     public function destroy(Room $room, Request $request){
         $this->authorize('isGuest', Reservation::class);
 
-        $reservation = $request->user()->guest->reservations;
-        $roomId = $room->id;
+        $reservation = $request->user()->guest->reservations->whereIn('reservation_status_id', [1])->first();
+        $roomId = $room->room_id;
         $reservation->rooms()->detach($roomId);
         return back();
     }

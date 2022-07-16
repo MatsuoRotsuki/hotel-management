@@ -66,6 +66,25 @@
 
 
                             <div class="mt-4">
+                                <x-label for="gender" :value="__('Gender')" />
+
+                                <select name="gender" id="gender" class="block mt-1 w-full">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+
+
+                            <div class="mt-4">
+                                <x-label for="dob" :value="__('Date of birth')" />
+
+                                <x-input id="dob" class="block mt-1 w-full"
+                                                type="date"
+                                                name="dob" :value="old('dob')" />
+                            </div>
+
+
+                            <div class="mt-4">
                                 <x-label for="address" :value="__('Address')" />
 
                                 <x-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address')" required autofocus />
@@ -87,14 +106,24 @@
 
 
                             <div class="mt-4">
+                                <x-label for="department_id" :value="__('Department')" />
+                                <select name="department_id" id="department_id">
+                                    @foreach ($departments as $department)
+                                        <option value="{{$department->department_id}}">{{  $department->department_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+                            <div class="mt-4">
                                 <x-label for="salary" :value="__('Salary')" />
 
                                 <x-input id="salary" class="block mt-1 w-full" type="text" name="salary" :value="old('salary')" required autofocus />
                             </div>
 
 
-                            <x-button class="ml-4">
-                                {{ __('Register') }}
+                            <x-button class="ml-4 mt-4">
+                                {{ __('Create account') }}
                             </x-button>
                         </form>
                     </div>

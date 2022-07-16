@@ -29,10 +29,10 @@
                 </form>
 
                 @foreach ($room_statuses as $room_status)
-                    <form method="GET" action="{{ route('room.filter', $room_status->id) }}">
+                    <form method="GET" action="{{ route('room.filter', $room_status->room_status_id) }}">
                         @csrf
 
-                        <x-dropdown-link :href="route('room.filter', $room_status->id)"
+                        <x-dropdown-link :href="route('room.filter', $room_status->room_status_id)"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
                             {{ __(Str::title($room_status->room_status_name)) }}
@@ -100,7 +100,7 @@
                     <!-- Vacant room -->
                     @php
                         $statusName = $room->room_status->room_status_name;
-                        $displayColor = getColor($room->room_status->id);
+                        $displayColor = getColor($room->room_status->room_status_id);
                     @endphp
 
                     <a href="{{ route('room.show', ['room' => $room]) }}">
@@ -121,28 +121,32 @@
                                 <button type="submit">Click to view</button>
                             </form>
                         </div>
+
+
                         @can('isGuest', App\Room::class)
 
-                        @if(canReserve($room->room_status->id))
+                        @if(canReserve($room->room_status->room_status_id))
                             @php
-                                $roomGuestId = $room->reservations->pluck('guest')->pluck('id');
+                                $roomGuestId = $room->reservations->pluck('guest')->pluck('guest_id');
                                 if(Auth::user()->confirmedInformation){
-                                    $userGuestId = Auth::user()->guest->id;
+                                    $userGuestId = Auth::user()->guest->guest_id;
 
                                 } else {
                                     $userGuestId = null;
                                 }
                             @endphp
                             @if (!$roomGuestId->contains($userGuestId))
+                                @if(Auth::user()->guest->reservations->whereIn('reservation_status_id', [1])->first())
                                 <div class="text-center hover:bg-gray-50 hover:text-gray-900">
                                     <form method="POST" action="{{ route('book.push', ['room' => $room]) }}">
                                         @csrf
                                         <button type="submit">Book this room</button>
                                     </form>
                                 </div>
+                                @endif
                             @else
                                 <div class="text-left ml-2">
-                                    Already Booked! (In Queue... To confirm reservation, please redirect to Booked)
+                                    Already chosen! (...To confirm reservation, please redirect to Booked)
                                 </div>
                                 <div class="text-center hover:bg-gray-50 hover:text-gray-900">
                                     <form method="POST" action="{{ route('book.pop', ['room' => $room]) }}">
@@ -159,6 +163,7 @@
                             @endif
                         @endif
                         @endcan
+
 
                         @can('isAdmin', App\Room::class)
                         <div class="text-center hover:bg-gray-50 hover:text-gray-900">

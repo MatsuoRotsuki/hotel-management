@@ -15,10 +15,11 @@ class Rate extends Model
         'comment',
     ];
 
+    protected $primaryKey = 'rate_id';
 
     public function guest()
     {
-        return $this->belongsTo(Guest::class);
+        return $this->belongsTo(Guest::class, 'guest_id', 'guest_id');
     }
 
     public function ratedBy(Guest $guest)

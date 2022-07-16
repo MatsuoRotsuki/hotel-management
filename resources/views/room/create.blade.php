@@ -13,13 +13,15 @@
                         ADD ROOM
                     </h2>
                     <div>
+                        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+
                         <form action="{{ route('room-create') }}" method="post" class="mb-4 grid items-center" style="grid-gap:0.5em;">
                         @csrf
                             <input type="text" name="room_number" placeholder="Room number" value="{{ old('room_number') }}">
                             <input type="number" name="room_area" placeholder="Room area" value="{{ old('room_area') }}">
                             <select name="room_type" id="type_selector">
                                 @foreach ($room_types as $room_type)
-                                    <option value="{{$room_type->id}}">{{ Str::title($room_type->room_type_name) }}</option>
+                                    <option value="{{$room_type->room_type_id}}">{{ Str::title($room_type->room_type_name) }}</option>
                                 @endforeach
                             </select>
                             <input type="text" name="base_price" placeholder="Base Price" value="{{ old('base_price') }}">

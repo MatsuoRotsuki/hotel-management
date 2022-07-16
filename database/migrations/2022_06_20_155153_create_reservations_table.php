@@ -16,12 +16,22 @@ class CreateReservationsTable extends Migration
     public function up()
     {
         Schema::create('reservations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(Guest::class)->constrained()->onDelete('cascade');
+            $table->increments('reservation_id');
+
+            $table->integer('guest_id')->unsigned();
+            $table->foreign('guest_id')
+                ->references('guest_id')->on('guests')
+                ->onDelete('cascade');
+            // $table->foreignIdFor(Guest::class)->constrained()->onDelete('cascade');
             $table->date('checkin_date');
             $table->date('checkout_date');
             $table->integer('num_of_people')->unsigned()->default(1);
-            $table->foreignIdFor(ReservationStatus::class)->default(1)->constrained()->onDelete('cascade');
+
+            $table->integer('reservation_status_id')->unsigned()->default(1);
+            $table->foreign('reservation_status_id')
+                ->references('reservation_status_id')->on('reservation_statuses')
+                ->onDelete('cascade');
+
             $table->timestamps();
         });
     }

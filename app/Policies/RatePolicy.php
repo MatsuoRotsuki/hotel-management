@@ -17,9 +17,16 @@ class RatePolicy
      */
     public function delete(User $user, Rate $rate)
     {
-        if ($user->confirmedInformation){
-            return $user->guest->id === $rate->guest_id;
+        if ($user->role === 'admin'){
+            return true;
         }
-        else return false;
+        if ($user->confirmedInformation){
+            return $user->guest->guest_id === $rate->guest_id;
+        }
+        return false;
+    }
+
+    public function isGuest(User $user){
+        return $user->role === 'guest';
     }
 }

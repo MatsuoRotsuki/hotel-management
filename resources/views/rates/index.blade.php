@@ -12,7 +12,7 @@
                     <h2 class="text-xl justify-self-center justify-center font-semibold text-center">
                         RATINGS
                     </h2>
-                    <div>
+                    <div class="text-center">
                         {{$avgRate}}
                     </div>
                     <div>

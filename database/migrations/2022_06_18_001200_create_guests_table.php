@@ -23,8 +23,8 @@ class CreateGuestsTable extends Migration
             // $table->string('first_name', 50)->nullable();
             // $table->string('last_name', 50)->nullable();
             $table->date('dob')->nullable();
-            $table->string('address',50)->nullable();
-            $table->char('phone', 10);
+            $table->string('address')->nullable();
+            $table->char('phone', 20);
             $table->string('city', 50)->nullable();
             $table->string('country', 50)->nullable();
             $table->string('identification_number',50)->nullable();

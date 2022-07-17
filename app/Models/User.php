@@ -26,7 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'confirmedInformation',
+        'confirmed_information',
     ];
 
     protected $primaryKey = 'user_id';

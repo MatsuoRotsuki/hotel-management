@@ -24,6 +24,8 @@ class CreatePaymentsTable extends Migration
             $table->bigInteger('money')->unsigned();
             $table->timestamps();
         });
+
+        Schema::dropIfExists('payments');
     }
 
     /**

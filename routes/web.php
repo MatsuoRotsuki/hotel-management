@@ -1,11 +1,13 @@
 <?php
 
+use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\RatesController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 
@@ -52,8 +54,19 @@ Route::middleware(['auth', 'confirmed'])->group(function () {
     Route::post('/unbook/{room}', [ReservationController::class, 'destroy'])->middleware(['didReserved'])->name('book.pop');//done
     Route::get('/reservation-create', [ReservationController::class,'redirectCreate'])->name('book.create.render');//done
     Route::post('/reservation-create',[ReservationController::class, 'create'])->name('book.create');//done
+    Route::get('/reservation-update/{reservation}', [ReservationController::class, 'redirectUpdate'])->middleware(['didReserved'])->name('book.update.render');
+    Route::post('/reservation-update/{reservation}',[ReservationController::class, 'update'])->middleware(['didReserved'])->name('book.update');
     Route::get('/book-confirm', [ReservationController::class, 'confirm'])->middleware(['didReserved'])->name('book.confirm');
+    Route::get('/book-confirm/{reservation}/destroy', [ReservationController::class, 'destroyConfirmed'])->middleware(['didReserved'])->name('book.destroy');
     Route::get('/reservation-control-panel', [ReservationController::class, 'showQueue'])->name('book.showQueue');
+    Route::get('/confirm/{reservation}', [ReservationController::class, 'makeConfirm'])->name('book.makeConfirm');
+    Route::get('/decline/{reservation}', [ReservationController::class, 'makeDecline'])->name('book.makeDecline');
+    Route::get('/checkin/{reservation}', [ReservationController::class, 'makeCheckin'])->name('book.makeCheckin');
+    Route::get('/checkout/{reservation}', [ReservationController::class, 'makeCheckout'])->name('book.makeCheckout');
+    Route::get('/delete/{reservation}', [ReservationController::class, 'makeDelete'])->name('book.makeDelete');
+    Route::get('/book-cancel/{reservation}', [ReservationController::class, 'cancel'])->name('book.cancel');
+
+    Route::get('/test-book/{reservation}', [ReservationController::class, 'test'])->name('test');
 });
 
 Route::get('/gallery',[GalleryController::class, 'index'])->name('gallery');
@@ -62,10 +75,13 @@ Route::get('/rates', [RatesController::class, 'index'])->name('rates');
 Route::post('/rates', [RatesController::class, 'create'])->name('rates.create');
 Route::post('/rates/{rate}', [RatesController::class, 'destroy'])->name('rates.destroy');
 
+Route::get('/payments', [PaymentController::class, 'index'])->middleware(['didReserved','confirmed'])->name('payment');
+
 Route::post('/change-role', function(){
     $newRole = (Auth::user()->role === 'admin') ? 'guest' : 'admin';
     Auth::user()->update(['role' => $newRole]);
-    return back();
+    if ($newRole == 'admin') return redirect()->route('book.showQueue');
+    else return redirect()->route('booked');
 })->middleware('auth')->name('change.role');
 
 Route::post('/change-role/staff', function(){

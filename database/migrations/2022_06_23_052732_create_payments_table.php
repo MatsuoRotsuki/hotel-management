@@ -15,7 +15,10 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->increments('payment_id');
-            $table->integer('guest_id')->unsigned();
+            $table->integer('reservation_id')->unsigned();
+            $table->foreign('reservation_id')
+                ->references('reservation_id')->on('reservations')
+                ->onDelete('cascade');
             $table->string('guest_account');
             $table->string('receiver_account');
             $table->bigInteger('money')->unsigned();

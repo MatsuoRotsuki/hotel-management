@@ -108,7 +108,7 @@
                             Room number: {{ $room->room_number }}<br>
                             Room type: {{ $room->room_type->room_type_name }}<br>
                             Room status: {{ $room->room_status->room_status_name }}<br>
-                            Base price: {{ $room->base_price }}<br>
+                            Base price: {{ number_format($room->base_price) }}<br>
                             Room area: {{ $room->room_area }}<br>
                         </div>
                     </a>

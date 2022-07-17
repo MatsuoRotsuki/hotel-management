@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Reservation;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Payment extends Model
 {
@@ -16,4 +17,13 @@ class Payment extends Model
         'receiver_account',
         'money',
     ];
+
+    protected $attributes = [
+        'guest_id' => 1
+    ];
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class, 'reservation_id', 'reservation_id');
+    }
 }

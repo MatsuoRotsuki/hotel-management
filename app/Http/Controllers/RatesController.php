@@ -50,7 +50,7 @@ class RatesController extends Controller
 
     public function destroy(Rate $rate)
     {
-        $this->authorize('isGuest', Reservation::class);
+        $this->authorize('delete', $rate);
 
         $rate->delete();
 

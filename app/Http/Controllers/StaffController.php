@@ -64,4 +64,13 @@ class StaffController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
+    public function destroy(Staff $staff)
+    {
+        $this->authorize('isAdmin', Staff::class);
+
+        $staff->delete();
+
+        return back();
+    }
 }

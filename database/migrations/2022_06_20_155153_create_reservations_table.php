@@ -33,6 +33,8 @@ class CreateReservationsTable extends Migration
                 ->onDelete('cascade');
 
             $table->timestamps();
+
+            $table->text('note')->nullable();
         });
     }
 

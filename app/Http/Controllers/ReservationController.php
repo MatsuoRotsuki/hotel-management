@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Room;
 use App\Models\Guest;
 use App\Models\RoomStatus;
@@ -13,13 +14,17 @@ class ReservationController extends Controller
     public function index(Request $request)
     {
         $guest = $request->user()->guest;
+
         $reservation = $guest->reservations->whereIn('reservation_status_id', [1, 2, 3, 4])->first();
+
         $reservation_status = $reservation->reservation_status_id;
+
         $selectedRoomIds = null;
         $confirmedRoomIds = null;
         $queueRoomIds = null;
         $checkedInRoomIds = null;
         $checkedOutRoomsIds = null;
+
         if ($reservation_status === 1){
             $selectedRoomIds = $reservation->rooms()->pluck('rooms.room_id');
         } elseif ($reservation_status === 2){
@@ -28,9 +33,10 @@ class ReservationController extends Controller
             $confirmedRoomIds = $reservation->rooms()->pluck('rooms.room_id');
         } elseif ($reservation_status === 4){
             $checkedInRoomIds = $reservation->rooms()->pluck('rooms.room_id');
-        } elseif ($reservation_status === 5){
-            $checkedOutRoomsIds = $reservation->rooms()->pluck('rooms.room_id');
         }
+
+        $totalMoney = $reservation->totalMoney();
+        $days = $reservation->days();
 
         $selectedRooms = Room::find($selectedRoomIds);
         $confirmedRooms = Room::find($confirmedRoomIds);
@@ -44,6 +50,9 @@ class ReservationController extends Controller
             'confirmedRooms' => $confirmedRooms,
             'checkedInRooms' => $checkedInRooms,
             'checkedOutRooms' => $checkedOutRooms,
+            'totalMoney' => $totalMoney,
+            'days' => $days,
+            'reservation' => $reservation,
         ]);
     }
 
@@ -60,6 +69,8 @@ class ReservationController extends Controller
 
         $this->authorize('isGuest', Reservation::class);
 
+        $this->authorize('create', Reservation::class);
+
         $this->validate($request, [
             'checkin_date' => ['required','date','after:yesterday'],
             'checkout_date' => ['required','date','after:checkin_date'],
@@ -75,14 +86,57 @@ class ReservationController extends Controller
         return redirect()->route('room');
     }
 
+    public function redirectUpdate(Reservation $reservation){
+        $this->authorize('update', $reservation);
+        return view('reservation.update', [
+            'reservation' => $reservation
+        ]);
+    }
+
+    public function update(Request $request, Reservation $reservation){
+        $this->authorize('update', $reservation);
+
+        $this->validate($request, [
+            'checkin_date' => ['required','date','after:yesterday'],
+            'checkout_date' => ['required','date','after:checkin_date'],
+            'num_of_people' => ['required','numeric','max:50'],
+        ]);
+
+        $reservation->update([
+            'checkin_date' => $request->checkin_date,
+            'checkout_date' => $request->checkout_date,
+            'num_of_people' => $request->num_of_people
+        ]);
+
+        if ($reservation->reservation_status_id === 3){
+            $reservation->update(['reservation_status_id' => 2]);
+        }
+
+        return redirect()->route('booked');
+    }
+
     public function redirectCreate(){
         return view('reservation.create');
     }
 
-    public function showQueue(){
+    public function showQueue(Request $request){
         $this->authorize('isStaff', Reservation::class);
 
-        dd('ok this is confirmed book');
+        $reservations = Reservation::whereIn('reservation_status_id', [1, 2, 3, 4, 5, 6, 7])->get()->sortBy('reservation_id');
+
+        return view('reservation.control', [
+            'reservations' => $reservations,
+        ]);
+    }
+
+    public function makeConfirm(Reservation $reservation){
+        $this->authorize('isStaff', Reservation::class);
+
+        $newStatus = $reservation->reservation_status_id + 1;
+
+        $reservation->update(['reservation_status_id' => $newStatus]);
+
+        return back();
     }
 
     public function confirm(Request $request)
@@ -111,5 +165,78 @@ class ReservationController extends Controller
         $roomId = $room->room_id;
         $reservation->rooms()->detach($roomId);
         return back();
+    }
+
+    public function destroyConfirmed(Reservation $reservation){
+
+        $this->authorize('update', $reservation);
+
+        $reservation->update(['reservation_status_id' => 1]);
+
+        $roomId = $reservation->rooms()->pluck('rooms.room_id');
+        $rooms = Room::find($roomId);
+        foreach ($rooms as $room) {
+            $room->update(['room_status_id' => 1]);
+        }
+        return redirect()->route('booked');
+    }
+
+    public function cancel(Request $request, Reservation $reservation){
+        $this->authorize('isAuth', Reservation::class);
+
+        $reservation->update(['reservation_status_id' => 6]);
+
+        return back();
+    }
+
+    public function makeDecline(Reservation $reservation)
+    {
+        $this->authorize('isStaff', Reservation::class);
+
+        $reservation->update(['reservation_status_id' => 7]);
+
+        return back();
+    }
+
+    public function makeCheckin(Reservation $reservation){
+        $this->authorize('isStaff', Reservation::class);
+
+        $reservation->update(['reservation_status_id' => 4]);
+
+        $roomId = $reservation->rooms()->pluck('rooms.room_id');
+        $rooms = Room::find($roomId);
+        foreach ($rooms as $room) {
+            $room->update(['room_status_id' => 2]);
+        }
+
+        return back();
+    }
+
+    public function makeCheckout(Reservation $reservation)
+    {
+        $this->authorize('checkout', $reservation);
+
+        $reservation->update(['reservation_status_id' => 5]);
+
+        $roomId = $reservation->rooms()->pluck('rooms.room_id');
+        $rooms = Room::find($roomId);
+        foreach ($rooms as $room) {
+            $room->update(['room_status_id' => 4]);
+        }
+
+        return back();
+    }
+
+    public function makeDelete(Reservation $reservation)
+    {
+        $this->authorize('isStaff', Reservation::class);
+
+        $reservation->delete();
+
+        return back();
+    }
+
+    public function test (Reservation $reservation, Request $request){
+        dd($reservation->reservedBy($request->user()));
     }
 }

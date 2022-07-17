@@ -19,9 +19,13 @@ class ReservationMiddleware
         if ($request->user()->role === 'staff' || $request->user()->role === 'admin'){
             return $next($request);
         }
-        if (!$request->user()->guest->reservations()->count()){
-            return redirect()->route('book.create.render');
+        if ($request->user()->guest){
+            if (!$request->user()->guest->reservations()->whereIn('reservation_status_id', [1,2,3,4])->count()){
+                return redirect()->route('book.create.render');
+            }
+            return $next($request);
+        } else {
+            return redirect()->route('guest.create.render');
         }
-        return $next($request);
     }
 }

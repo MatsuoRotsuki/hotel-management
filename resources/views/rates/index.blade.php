@@ -62,7 +62,7 @@
 
                             {{-- {{ $rates->links() }} --}}
                         @else
-                            <p> Chưa có lượt đánh giá nào </p>
+                            <p class="text-center mt-4"> Chưa có lượt đánh giá nào </p>
                         @endif
                     </div>
                 </div>

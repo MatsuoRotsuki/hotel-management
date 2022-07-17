@@ -33,7 +33,7 @@
 
                 @can('isStaff', App\Reservation::class)
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('book.showQueue')" :active="request()->routeIs('booked')">
+                    <x-nav-link :href="route('book.showQueue')" :active="request()->routeIs('book.showQueue')">
                         {{ __('Reservation Control Panel') }}
                     </x-nav-link>
                 </div>
@@ -44,6 +44,14 @@
                         {{ __('Gallery') }}
                     </x-nav-link>
                 </div>
+
+                {{-- @auth
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('payment')" :active="request()->routeIs('payment')">
+                        {{ __('Payment') }}
+                    </x-nav-link>
+                </div>
+                @endauth --}}
 
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('rates')" :active="request()->routeIs('rates')">

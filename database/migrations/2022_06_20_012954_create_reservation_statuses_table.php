@@ -25,6 +25,8 @@ class CreateReservationStatusesTable extends Migration
             ['reservation_status_id' => 3, 'reservation_status_name' => 'confirmed'],
             ['reservation_status_id' => 4, 'reservation_status_name' => 'checked in'],
             ['reservation_status_id' => 5, 'reservation_status_name' => 'checked out'],
+            ['reservation_status_id' => 6, 'reservation_status_name' => 'cancelled'],
+            ['reservation_status_id' => 7, 'reservation_status_name' => 'declined'],
         ]);
     }
 

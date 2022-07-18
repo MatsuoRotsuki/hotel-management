@@ -41,16 +41,18 @@ class RoomPolicy
         }
 
         $roomGuestId = $room->reservations->pluck('guest')->pluck('guest_id');
-        $reservation = $user->guest->reservations->whereIn('reservation_status_id', [1,2,3,4])->first();
-        $status = ($reservation->reservation_status_id === 1) ? 1 : 0;
         if (!$user->confirmedInformation){
-            return $canReserve && $status;
+            return $canReserve;
         } else {
             $guestId = $user->guest->guest_id;
-            if (!$roomGuestId->contains($guestId)){
-                return $canReserve && $status;
-            }
-            else return false;
+            if ($user->guest->reservations->count()){
+                $reservation = $user->guest->reservations->whereIn('reservation_status_id', [1,2,3,4])->first();
+                $status = ($reservation->reservation_status_id === 1) ? 1 : 0;
+                if (!$roomGuestId->contains($guestId)){
+                    return $canReserve && $status;
+                }
+                else return false;
+            } else return $canReserve;
         }
     }
 

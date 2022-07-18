@@ -80,8 +80,7 @@ Route::get('/payments', [PaymentController::class, 'index'])->middleware(['didRe
 Route::post('/change-role', function(){
     $newRole = (Auth::user()->role === 'admin') ? 'guest' : 'admin';
     Auth::user()->update(['role' => $newRole]);
-    if ($newRole == 'admin') return redirect()->route('book.showQueue');
-    else return redirect()->route('booked');
+    return redirect()->route('home');
 })->middleware('auth')->name('change.role');
 
 Route::post('/change-role/staff', function(){

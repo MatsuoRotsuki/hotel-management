@@ -47,7 +47,7 @@
 
                         @if($room->gallery->count())
                             <label for="img_url">Room image address</label>
-                            <input type="text" name="img_url" value="{{ $room->gallery->img_url->first() }}">
+                            <input type="text" name="img_url" value="{{ $room->gallery->pluck('img_url')->first() }}">
                         @else
                             <label for="img_url">Room image address</label>
                             <input type="text" name="img_url" value="">

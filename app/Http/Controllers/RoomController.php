@@ -105,7 +105,7 @@ class RoomController extends Controller
         ]);
 
         if($room->gallery->count()){
-            $room->gallery->update(['img_url' => $request->img_url]);
+            $room->gallery->first()->update(['img_url' => $request->img_url]);
         } else {
             $room->gallery()->create([
                 'img_url' => $request->img_url,

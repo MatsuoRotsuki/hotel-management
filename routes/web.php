@@ -58,16 +58,14 @@ Route::middleware(['auth', 'confirmed'])->group(function () {
     Route::post('/reservation-update/{reservation}',[ReservationController::class, 'update'])->middleware(['didReserved'])->name('book.update');
     Route::get('/book-confirm', [ReservationController::class, 'confirm'])->middleware(['didReserved'])->name('book.confirm');
     Route::get('/book-confirm/{reservation}/destroy', [ReservationController::class, 'destroyConfirmed'])->middleware(['didReserved'])->name('book.destroy');
-    Route::get('/reservation-control-panel', [ReservationController::class, 'showQueue'])->name('book.showQueue');
-    Route::get('/confirm/{reservation}', [ReservationController::class, 'makeConfirm'])->name('book.makeConfirm');
-    Route::get('/decline/{reservation}', [ReservationController::class, 'makeDecline'])->name('book.makeDecline');
-    Route::get('/checkin/{reservation}', [ReservationController::class, 'makeCheckin'])->name('book.makeCheckin');
-    Route::get('/checkout/{reservation}', [ReservationController::class, 'makeCheckout'])->name('book.makeCheckout');
-    Route::get('/delete/{reservation}', [ReservationController::class, 'makeDelete'])->name('book.makeDelete');
-    Route::get('/book-cancel/{reservation}', [ReservationController::class, 'cancel'])->name('book.cancel');
-
-    Route::get('/test-book/{reservation}', [ReservationController::class, 'test'])->name('test');
 });
+Route::get('/reservation-control-panel', [ReservationController::class, 'showQueue'])->name('book.showQueue');
+Route::get('/confirm/{reservation}', [ReservationController::class, 'makeConfirm'])->name('book.makeConfirm');
+Route::get('/decline/{reservation}', [ReservationController::class, 'makeDecline'])->name('book.makeDecline');
+Route::get('/checkin/{reservation}', [ReservationController::class, 'makeCheckin'])->name('book.makeCheckin');
+Route::get('/checkout/{reservation}', [ReservationController::class, 'makeCheckout'])->name('book.makeCheckout');
+Route::get('/delete/{reservation}', [ReservationController::class, 'makeDelete'])->name('book.makeDelete');
+Route::get('/book-cancel/{reservation}', [ReservationController::class, 'cancel'])->name('book.cancel');
 
 Route::get('/gallery',[GalleryController::class, 'index'])->name('gallery');
 

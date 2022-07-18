@@ -238,8 +238,4 @@ class ReservationController extends Controller
 
         return back();
     }
-
-    public function test (Reservation $reservation, Request $request){
-        dd($reservation->reservedBy($request->user()));
-    }
 }

@@ -32,7 +32,7 @@ class GuestController extends Controller
             'cccd' => ['string','max:50','nullable'],
         ]);
 
-        $user->update(['confirmedInformation' => 1]);
+        $user->update(['confirmed_information' => 1]);
 
         $request->user()->guest()->create([
             'dob' => $request->dob,

@@ -16,6 +16,6 @@ class GuestPolicy
      */
     public function notRegistered(User $user)
     {
-        return $user->confirmedInformation === 0;
+        return $user->confirmed_information === 0;
     }
 }

@@ -46,7 +46,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; grid-auto-rows: minmax(30px, auto); grid-gap: 1em; justify-items:stretch; align-items:stretch;">
             @php
-               function canReserve($status_id){
+                function canReserve($status_id){
                             switch ($status_id){
                                 case 1:
                                 case 4:
@@ -97,7 +97,7 @@
             @foreach ($rooms as $room)
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg text-center"> <!--container-->
 
-                    <!-- Vacant room -->
+
                     @php
                         $statusName = $room->room_status->room_status_name;
                         $displayColor = getColor($room->room_status->room_status_id);
@@ -122,13 +122,20 @@
                             </form>
                         </div>
 
-
                         @can('isGuest', App\Room::class)
 
-                        @if(canReserve($room->room_status->room_status_id))
+                        @can('book', $room)
+                        <div class="text-center hover:bg-gray-50 hover:text-gray-900">
+                            <form method="POST" action="{{ route('book.push', ['room' => $room]) }}">
+                                @csrf
+                                <button type="submit">Book this room</button>
+                            </form>
+                        </div>
+
+                        {{-- @if(canReserve($room->room_status->room_status_id))
                             @php
                                 $roomGuestId = $room->reservations->pluck('guest')->pluck('guest_id');
-                                if(Auth::user()->confirmedInformation){
+                                if(Auth::user()->confirmed_information){
                                     $userGuestId = Auth::user()->guest->guest_id;
 
                                 } else {
@@ -154,15 +161,34 @@
                                         <button type="submit">Unbook this room</button>
                                     </form>
                                 </div>
-                            @endif
-                        @else
+                            @endif --}}
+                        {{-- @else
                             @if ($room->bookedBy(Auth::user()))
                                 <div class="text-center hover:bg-gray-50 hover:text-gray-900">
                                     You've booked this room
                                 </div>
                             @endif
-                        @endif
+                        @endif --}}
                         @endcan
+                        @can('unbook', $room)
+                            <div class="text-left ml-2">
+                                Already chosen! (...To confirm reservation, please redirect to Booked)
+                            </div>
+                            <div class="text-center hover:bg-gray-50 hover:text-gray-900">
+                                <form method="POST" action="{{ route('book.pop', ['room' => $room]) }}">
+                                    @csrf
+                                    <button type="submit">Unbook this room</button>
+                                </form>
+                            </div>
+                        @endcan
+
+                        @can('hasBooked', $room)
+                            <div class="text-center hover:bg-gray-50 hover:text-gray-900">
+                                You've booked this room
+                            </div>
+                        @endcan
+
+                        @endcan <!-- End guest display -->
 
 
                         @can('isAdmin', App\Room::class)

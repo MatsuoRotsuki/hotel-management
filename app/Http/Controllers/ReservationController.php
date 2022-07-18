@@ -57,7 +57,7 @@ class ReservationController extends Controller
     }
 
     public function store(Room $room, Request $request){ //book.push
-        $this->authorize('isGuest', Reservation::class);
+        $this->authorize('book', $room);
 
         $reservation = $request->user()->guest->reservations->whereIn('reservation_status_id', [1])->first();
         $roomId = $room->room_id;
@@ -116,6 +116,9 @@ class ReservationController extends Controller
     }
 
     public function redirectCreate(){
+        $this->authorize('isGuest', Reservation::class);
+        $this->authorize('create', Reservation::class);
+
         return view('reservation.create');
     }
 
@@ -159,7 +162,7 @@ class ReservationController extends Controller
     }
 
     public function destroy(Room $room, Request $request){
-        $this->authorize('isGuest', Reservation::class);
+        $this->authorize('unbook', $room);
 
         $reservation = $request->user()->guest->reservations->whereIn('reservation_status_id', [1])->first();
         $roomId = $room->room_id;

@@ -93,6 +93,7 @@ class RoomController extends Controller
             'room_type' => ['required','numeric'],
             'base_price' => ['required','numeric'],
             'room_status' => ['required','numeric'],
+            'img_url' => ['url','nullable'],
         ]);
 
         $room->update([
@@ -102,6 +103,14 @@ class RoomController extends Controller
             'base_price' => $request->base_price,
             'room_status_id' => $request->room_status,
         ]);
+
+        if($room->gallery->count()){
+            $room->gallery->update(['img_url' => $request->img_url]);
+        } else {
+            $room->gallery()->create([
+                'img_url' => $request->img_url,
+            ]);
+        }
 
         return redirect('room');
     }

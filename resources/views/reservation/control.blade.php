@@ -26,6 +26,7 @@
                         <p>Length of stay: {{ $reservation->days() }} {{ Str::plural('day', $reservation->days()) }}</p>
                         <p>Check-in date: {{ $reservation->checkin_date }}</p>
                         <p>Check-out date: {{$reservation->checkout_date}}</p>
+                        <p>Number of people: {{ $reservation->num_of_people }}</p>
                         <p>Total cost: {{ number_format($reservation->totalMoney()) }}</p>
                         <p>Number of rooms: {{ $reservation->rooms->count() }}</p>
                         <p>Reservation status: {{Str::title($reservation->status->reservation_status_name)}}</p>

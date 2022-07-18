@@ -43,6 +43,16 @@
                                     @endif>{{ Str::title($room_status->room_status_name) }}</option>
                             @endforeach
                         </select>
+
+
+                        @if($room->gallery->count())
+                            <label for="img_url">Room image address</label>
+                            <input type="text" name="img_url" value="{{ $room->gallery->img_url->first() }}">
+                        @else
+                            <label for="img_url">Room image address</label>
+                            <input type="text" name="img_url" value="">
+                        @endif
+
                         <button type="submit" class="bg-blue-400 text-white p-4">Done</button>
                     </form>
                 </div>

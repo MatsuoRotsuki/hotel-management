@@ -40,12 +40,12 @@ class RoomPolicy
                 break;
         }
 
-        $roomGuestId = $room->reservations->pluck('guest')->pluck('guest_id');
-        if (!$user->confirmedInformation){
+        $roomGuestId = $room->reservations->whereIn('reservation_status_id', [1,2,3,4])->pluck('guest')->pluck('guest_id');
+        if (!$user->confirmed_information){
             return $canReserve;
         } else {
             $guestId = $user->guest->guest_id;
-            if ($user->guest->reservations->count()){
+            if ($user->guest->reservations->whereIn('reservation_status_id', [1,2,3,4])->count() > 0){
                 $reservation = $user->guest->reservations->whereIn('reservation_status_id', [1,2,3,4])->first();
                 $status = ($reservation->reservation_status_id === 1) ? 1 : 0;
                 if (!$roomGuestId->contains($guestId)){
@@ -57,7 +57,7 @@ class RoomPolicy
     }
 
     public function unbook(User $user, Room $room){
-        $roomGuestId = $room->reservations->pluck('guest')->pluck('guest_id');
+        $roomGuestId = $room->reservations->whereIn('reservation_status_id', [1])->pluck('guest')->pluck('guest_id');
         if (!$user->confirmed_information){
             return false;
         } else {
@@ -77,6 +77,16 @@ class RoomPolicy
             if($roomGuestId->contains($guestId) && $room->room_status_id === 3){
                 return true;
             } else return false;
+        }
+    }
+
+    public function hasCheckedIn(User $user, Room $room){
+        $roomGuestId = $room->reservations->whereIn('reservation_status_id', [4])->pluck('guest')->pluck('guest_id');
+        if (!$user->confirmed_information){
+            return false;
+        } else {
+            $guestId = $user->guest->guest_id;
+            return $roomGuestId->contains($guestId) && $room->room_status_id === 2;
         }
     }
 }

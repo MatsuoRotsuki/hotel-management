@@ -20,7 +20,7 @@ class RatePolicy
         if ($user->role === 'admin'){
             return true;
         }
-        if ($user->confirmedInformation){
+        if ($user->confirmed_information){
             return $user->guest->guest_id === $rate->guest_id;
         }
         return false;

@@ -17,11 +17,11 @@ class RoomFactory extends Factory
     public function definition()
     {
         return [
-            'room_number' => $this->faker->unique()->numberBetween($min = 100, $max = 300),
+            'room_number' => $this->faker->unique()->numberBetween($min = 100, $max = 500),
             'room_type_id' => $this->faker->numberBetween($min = 1, $max = 8),
             'room_status_id' => $this->faker->numberBetween($min = 1, $max = 7),
-            'room_area' => $this->faker->numberBetween($min = 12, $max = 70),
-            'base_price' => $this->faker->numberBetween($min = 20000, $max = 200000),
+            'room_area' => $this->faker->numberBetween($min = 12, $max = 50),
+            'base_price' => $this->faker->numberBetween($min = 20000, $max = 120000),
         ];
     }
 }

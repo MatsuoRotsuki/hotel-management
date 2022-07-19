@@ -17,7 +17,7 @@ class GuestFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->unique()->numberBetween($min = 49, $max = 74),
+            'user_id' => $this->faker->unique()->numberBetween($min = 1, $max = 50),
             'dob' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
             'address' => $this->faker->streetAddress(),
             'phone' => $this->faker->tollFreePhoneNumber(),

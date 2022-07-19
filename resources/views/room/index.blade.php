@@ -188,6 +188,12 @@
                             </div>
                         @endcan
 
+                        @can('hasCheckedIn', $room)
+                            <div class="text-center hover:bg-gray-50 hover:text-gray-900">
+                                You are staying in this room
+                            </div>
+                        @endcan
+
                         @endcan <!-- End guest display -->
 
 
@@ -206,7 +212,9 @@
                             </form>
                         </div>
                         @endcan
-
+                        {{-- <div class="text-center hover:bg-gray-50 hover:text-gray-900">
+                            {{ Auth::user()->confirmed_information }}
+                        </div> --}}
                     </div>
                 </div>
             @endforeach

@@ -34,7 +34,7 @@ class CreateStaffTable extends Migration
             $table->date('dob')->nullable();
             $table->string('address',50)->nullable();
             $table->char('gender', 6);
-            $table->char('phone', 10);
+            $table->char('phone', 20);
             $table->string('identification_number', 50);
             $table->bigInteger('salary')->nullable()->default(0);
         });

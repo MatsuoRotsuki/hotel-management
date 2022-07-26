@@ -21,7 +21,12 @@ class CreateDepartmentsTable extends Migration
 
         DB::table('departments')->insert([
             ['department_id' => 1, 'department_name' => 'Reception'],
-            ['department_id' => 2, 'department_name' => 'Janitor'],
+            ['department_id' => 2, 'department_name' => 'Housekeeping'],
+            ['department_id' => 3, 'department_name' => 'Engineering and Maintenance'],
+            ['department_id' => 4, 'department_name' => 'Account and Credits'],
+            ['department_id' => 5, 'department_name' => 'Security'],
+            ['department_id' => 6, 'department_name' => 'HR'],
+            ['department_id' => 7, 'department_name' => 'Marketing'],
         ]);
     }
 

@@ -99,6 +99,9 @@
                             @can('update', $reservation)
                                 <a href="{{ route('book.update.render', $reservation) }}" class="hover:text-gray-500 mt-3">Modify</a>
                             @endcan
+                            @can('cancel', $reservation)
+                                <a href="{{ route('book.cancel', $reservation) }}" class="hover:text-gray-500 mt-3">Cancel</a>
+                            @endcan
                         </div>
                 </div>
                 @endif

@@ -13,4 +13,8 @@ class ReservationPivot extends Model
         'room_id',
         'reservation_id'
     ];
+
+    protected $table = 'reservation_room';
+
+    public $timestamps = false;
 }

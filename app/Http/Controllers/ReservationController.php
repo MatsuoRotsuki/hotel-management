@@ -189,6 +189,12 @@ class ReservationController extends Controller
 
         $reservation->update(['reservation_status_id' => 6]);
 
+        $roomId = $reservation->rooms()->pluck('rooms.room_id');
+        $rooms = Room::find($roomId);
+        foreach ($rooms as $room) {
+            $room->update(['room_status_id' => 1]);
+        }
+
         return back();
     }
 
@@ -197,6 +203,12 @@ class ReservationController extends Controller
         $this->authorize('isStaff', Reservation::class);
 
         $reservation->update(['reservation_status_id' => 7]);
+
+        $roomId = $reservation->rooms()->pluck('rooms.room_id');
+        $rooms = Room::find($roomId);
+        foreach ($rooms as $room) {
+            $room->update(['room_status_id' => 1]);
+        }
 
         return back();
     }

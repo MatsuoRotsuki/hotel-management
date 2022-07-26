@@ -44,4 +44,8 @@ class ReservationPolicy
     public function create(User $user){
         return $user->guest->reservations()->whereIn('reservation_status_id', [1,2,3,4])->count() === 0;
     }
+
+    public function cancel(User $user, Reservation $reservation){
+        return $reservation->reservedBy($user);
+    }
 }

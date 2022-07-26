@@ -26,7 +26,7 @@ class CreateGuestsTable extends Migration
             $table->string('address')->nullable();
             $table->char('phone', 20);
             $table->string('city', 50)->nullable();
-            $table->string('country', 50)->nullable();
+            $table->string('country')->nullable();
             $table->string('identification_number',50)->nullable();
             $table->string('passport_id',50)->nullable();
             $table->timestamps();

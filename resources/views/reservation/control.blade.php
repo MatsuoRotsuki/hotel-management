@@ -70,6 +70,7 @@
         </div>
     </div>
     @endforeach
+        {{ $reservations->links()}}
     @if ($reservations->count() === 0)
         <p class="mt-8 mx-auto text-center">There's no reservation request</p>
     @endif

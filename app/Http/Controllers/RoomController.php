@@ -13,7 +13,7 @@ class RoomController extends Controller
     public function index()
     {
         $room_statuses = RoomStatus::all();
-        $rooms = Room::orderBy('room_number')->get();
+        $rooms = Room::orderBy('room_number')->paginate(20);
         return view('room.index',[
             'rooms' => $rooms,
             'room_statuses' => $room_statuses,
@@ -21,7 +21,7 @@ class RoomController extends Controller
     }
 
     public function filter($filter){
-        $rooms = Room::orderBy('room_number')->get()->where('room_status_id', $filter);
+        $rooms = Room::orderBy('room_number')->whereIn('room_status_id', [$filter])->paginate(20);
         $room_statuses = RoomStatus::all();
         return view('room.index', [
             'rooms' => $rooms,

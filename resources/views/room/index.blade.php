@@ -241,4 +241,5 @@
             @endauth
         </div>
     </div>
+    {{$rooms->links()}}
 </x-app-layout>

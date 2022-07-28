@@ -125,7 +125,7 @@ class ReservationController extends Controller
     public function showQueue(Request $request){
         $this->authorize('isStaff', Reservation::class);
 
-        $reservations = Reservation::whereIn('reservation_status_id', [1, 2, 3, 4, 5, 6, 7])->get()->sortBy('reservation_id');
+        $reservations = Reservation::latest()->whereIn('reservation_status_id', [1, 2, 3, 4, 5, 6, 7])->paginate(20);
 
         return view('reservation.control', [
             'reservations' => $reservations,
